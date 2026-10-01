@@ -1,0 +1,83 @@
+﻿@model SoccerClubPlayerManagement.Models.Lineup
+
+@{
+    ViewData["Title"] = "Starting Lineup";
+}
+
+<h1>Starting Lineup</h1>
+
+@if (Model == null)
+{
+    <p class="text-muted">No lineup has been saved yet.</p>
+    @if (User.IsInRole("Coach"))
+    {
+        <a asp-action="Edit" class="btn btn-primary">Set Up Lineup</a>
+    }
+}
+else
+{
+    <div class="d-flex justify-content-between flex-wrap mb-3">
+        <h4>Formation: @Model.Formation?.Name</h4>
+        @if (!string.IsNullOrEmpty(Model.CoachName))
+        {
+            <h5 class="text-muted">Coach: @Model.CoachName</h5>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-auto">
+            <div style="position: relative; width: 340px; max-width: 100%; aspect-ratio: 2 / 3; background: linear-gradient(#2e7d32, #1b5e20); border: 2px solid #fff; border-radius: 4px;">
+                <!-- Halfway line + centre circle for a basic pitch look -->
+                <div style="position:absolute; top:50%; left:0; right:0; border-top:2px solid rgba(255,255,255,0.6);"></div>
+                <div style="position:absolute; top:50%; left:50%; width:70px; height:70px; margin:-35px 0 0 -35px; border:2px solid rgba(255,255,255,0.6); border-radius:50%;"></div>
+
+                @if (Model.LineupSlots != null)
+                {
+                    @foreach (var slot in Model.LineupSlots)
+                    {
+                        var isCaptain = slot.PlayerId.HasValue && slot.PlayerId == Model.CaptainPlayerId;
+                        <div style="position:absolute; left:@(slot.FormationSlot?.X)%; top:@(slot.FormationSlot?.Y)%; transform: translate(-50%, -50%); text-align:center; color:#fff; width:75px;">
+                            <div style="background:#fff; color:#000; border-radius:50%; width:30px; height:30px; line-height:30px; margin:0 auto; font-weight:bold; font-size:0.75rem; position:relative;">
+                                @slot.FormationSlot?.Label
+                                @if (isCaptain)
+                                {
+                                    <span style="position:absolute; top:-8px; right:-8px; background:#ffc107; color:#000; border-radius:50%; width:18px; height:18px; line-height:18px; font-size:0.65rem;">C</span>
+                                }
+                            </div>
+                            <div style="font-size:0.7rem; margin-top:2px; text-shadow: 1px 1px 2px #000;">
+                                @(slot.Player != null ? $"{slot.Player.FirstName} {slot.Player.LastName}" : "—")
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="col">
+            @if (Model.Substitutes != null && Model.Substitutes.Any())
+            {
+                <h5>Substitutes</h5>
+                <ul class="list-group" style="max-width: 350px;">
+                    @foreach (var sub in Model.Substitutes.OrderBy(s => s.SubOrder))
+                    {
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>@(sub.Player != null ? $"{sub.Player.FirstName} {sub.Player.LastName}" : "—")</span>
+                            <span class="text-muted">@sub.Player?.Position?.Name</span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No substitutes named.</p>
+            }
+        </div>
+    </div>
+
+    <p class="text-muted mt-3">Last updated: @Model.LastUpdated.ToString("dd MMM yyyy, HH:mm")</p>
+
+    @if (User.IsInRole("Coach"))
+    {
+        <a asp-action="Edit" class="btn btn-secondary">Edit Lineup</a>
+    }
+}

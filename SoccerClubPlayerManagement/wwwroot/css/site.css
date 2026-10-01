@@ -1,22 +1,457 @@
+/* =========================================
+   GWP FC Player Management
+   Green / White / Black Theme
+   ========================================= */
+
+/* Main colours */
+:root {
+    --club-green: #198754;
+    --dark-green: #146c43;
+    --light-green: #e9f7ef;
+    --club-black: #111111;
+    --dark-grey: #333333;
+    --light-grey: #f5f5f5;
+    --white: #ffffff;
+}
+
+/* General page styling */
 html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    font-size: 14px;
 }
 
 body {
-  margin-bottom: 60px;
+    margin: 0;
+    background-color: var(--light-grey);
+    color: var(--club-black);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Navigation bar */
+.navbar {
+    background-color: var(--club-black) !important;
+    padding: 12px 0;
+}
+
+.navbar-brand {
+    color: var(--white) !important;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.navbar .nav-link {
+    color: var(--white) !important;
+    margin-left: 8px;
+    transition: 0.2s ease;
+}
+
+    .navbar .nav-link:hover {
+        color: #7ee2a8 !important;
+    }
+
+/* Main page container */
+.container {
+    max-width: 1200px;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4 {
+    color: var(--club-black);
+    font-weight: 700;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--club-green);
+    border-color: var(--club-green);
+}
+
+    .btn-primary:hover {
+        background-color: var(--dark-green);
+        border-color: var(--dark-green);
+    }
+
+.btn-success {
+    background-color: var(--club-green);
+    border-color: var(--club-green);
+}
+
+/* Secondary buttons */
+.btn-secondary {
+    background-color: var(--dark-grey);
+    border-color: var(--dark-grey);
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    background-color: var(--white);
+}
+
+.card-header {
+    background-color: var(--club-green);
+    color: var(--white);
+    font-weight: bold;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    border: 1px solid #cccccc;
+    border-radius: 7px;
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--club-green);
+        box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.20);
+    }
+
+/* Tables */
+.table thead {
+    background-color: var(--club-black);
+    color: var(--white);
+}
+
+.table tbody tr:hover {
+    background-color: var(--light-green);
+}
+
+/* Green status badge */
+.badge.bg-success {
+    background-color: var(--club-green) !important;
+}
+
+/* Player profile */
+.player-profile {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Player photograph */
+.player-photo {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 4px solid var(--club-green);
+}
+
+/* Footer */
+footer {
+    background-color: var(--club-black);
+    color: var(--white);
+    padding: 20px 0;
+    margin-top: 40px;
+}
+
+    footer a {
+        color: #7ee2a8;
+    }
+
+/* Links */
+a {
+    color: var(--club-green);
+}
+
+    a:hover {
+        color: var(--dark-green);
+    }
+
+/* Home page hero section */
+.club-hero {
+    background-color: var(--club-green);
+    color: var(--white);
+    padding: 60px 30px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+    .club-hero h1 {
+        color: var(--white);
+        font-weight: 700;
+    }
+
+    .club-hero p {
+        font-size: 1.1rem;
+    }
+
+/* Small screens */
+@media (max-width: 768px) {
+
+    .club-hero {
+        padding: 40px 20px;
+    }
+
+        .club-hero h1 {
+            font-size: 2rem;
+        }
+
+    .player-profile {
+        padding: 18px;
+    }
+}
+
+.club-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.club-poster {
+    width: 350px;
+    height: 300px;
+    object-fit: contain;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+/* =========================================
+   HOME PAGE
+   ========================================= */
+
+/* Hero */
+.home-hero {
+    margin-top: 25px;
+    padding: 70px 50px;
+    border-radius: 18px;
+    min-height: 430px;
+    display: flex;
+    align-items: center;
+}
+
+.hero-badge {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    padding: 7px 14px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.home-hero h1 {
+    color: white;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+    .home-hero h1 span {
+        color: #b8f5cf;
+    }
+
+.hero-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    max-width: 650px;
+    line-height: 1.7;
+    margin: 20px 0 30px;
+}
+
+.hero-buttons {
+    margin-top: 20px;
+}
+
+.soccer-icon-circle {
+    width: 220px;
+    height: 220px;
+    margin: auto;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .soccer-icon-circle span {
+        font-size: 100px;
+    }
+
+
+/* Quick statistics */
+.home-stats {
+    margin: 35px 0;
+}
+
+.stat-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px 15px;
+    text-align: center;
+    height: 100%;
+    border-top: 4px solid var(--club-green);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+.stat-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.stat-card h2 {
+    color: var(--club-green);
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+}
+
+.stat-card p {
+    color: #666;
+    margin-bottom: 0;
+}
+
+
+/* Main home section */
+.home-section {
+    background-color: white;
+    padding: 55px 45px;
+    border-radius: 15px;
+    margin: 35px 0;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.section-label {
+    color: var(--club-green);
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+.home-section h2 {
+    font-size: 2.2rem;
+    margin: 12px 0 20px;
+}
+
+.home-section p {
+    color: #555;
+    line-height: 1.7;
+}
+
+
+/* Feature panel */
+.feature-panel {
+    background-color: var(--light-green);
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(25, 135, 84, 0.15);
+}
+
+    .feature-item:last-child {
+        border-bottom: none;
+    }
+
+.feature-icon {
+    min-width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: var(--club-green);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.feature-item h5 {
+    margin-bottom: 5px;
+    color: var(--club-black);
+}
+
+.feature-item p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+
+/* Call to action */
+.home-cta {
+    background-color: var(--club-black);
+    color: white;
+    padding: 55px 25px;
+    border-radius: 15px;
+    margin: 35px 0;
+}
+
+    .home-cta h2 {
+        color: white;
+        font-size: 2rem;
+        margin-bottom: 12px;
+    }
+
+    .home-cta p {
+        color: rgba(255, 255, 255, 0.75);
+        margin-bottom: 25px;
+    }
+
+
+/* Home page responsive design */
+@media (max-width: 991px) {
+
+    .home-hero {
+        padding: 50px 30px;
+        text-align: center;
+    }
+
+    .hero-text {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .soccer-icon-circle {
+        width: 160px;
+        height: 160px;
+        margin-top: 40px;
+    }
+
+        .soccer-icon-circle span {
+            font-size: 70px;
+        }
+}
+
+
+@media (max-width: 576px) {
+
+    .home-hero {
+        padding: 40px 20px;
+    }
+
+        .home-hero h1 {
+            font-size: 2.2rem;
+        }
+
+    .hero-buttons .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .home-section {
+        padding: 35px 20px;
+    }
+
+        .home-section h2 {
+            font-size: 1.8rem;
+        }
+
+    .home-cta {
+        padding: 40px 20px;
+    }
 }

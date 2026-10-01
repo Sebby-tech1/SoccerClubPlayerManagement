@@ -1,0 +1,126 @@
+﻿@model IEnumerable<SoccerClubPlayerManagement.Models.Player>
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Players";
+    var positions = ViewBag.Positions as SelectList;
+    var traits = ViewBag.Traits as SelectList;
+}
+
+<h1>Players</h1>
+
+<p>
+    @if (User.IsInRole("Coach"))
+    {
+        <a asp-action="Create" class="btn btn-primary">+ Register New Player</a>
+    }
+</p>
+
+<form asp-action="Index" method="get" class="row g-2 mb-4">
+    <div class="col-md-3">
+        <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Search by name..." />
+    </div>
+    <div class="col-md-3">
+        <select name="positionId" asp-items="positions" class="form-select">
+            <option value="">-- All Positions --</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select name="traitId" asp-items="traits" class="form-select">
+            <option value="">-- All Traits --</option>
+        </select>
+    </div>
+    <div class="col-md-2 form-check d-flex align-items-center">
+        <input type="checkbox" name="showInactive" value="true" class="form-check-input me-2"
+               id="showInactive" @(((bool)ViewBag.ShowInactive) ? "checked" : "") />
+        <label class="form-check-label" for="showInactive">Show inactive</label>
+    </div>
+    <div class="col-md-1">
+        <button type="submit" class="btn btn-outline-secondary w-100">Filter</button>
+    </div>
+</form>
+
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+    <thead>
+        <tr>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Available</th>
+            <th>Traits</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var player in Model)
+    {
+        <tr class="@(player.IsActive ? "" : "table-secondary")">
+            <td>
+                @if (!string.IsNullOrEmpty(player.PhotoUrl))
+                {
+                    <img src="@player.PhotoUrl" alt="@player.FirstName" style="width:48px;height:48px;object-fit:cover;border-radius:50%;" />
+                }
+                else
+                {
+                    <span class="text-muted">No photo</span>
+                }
+            </td>
+            <td>@player.FirstName @player.LastName</td>
+            <td>@player.Position?.Name</td>
+            <td>
+                @if (player.IsAvailable)
+                {
+                    <span class="badge bg-success">Available</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark">Unavailable</span>
+                }
+            </td>
+            <td>
+                @if (player.PlayerTraits != null && player.PlayerTraits.Any())
+                {
+                    @string.Join(", ", player.PlayerTraits.Select(pt => $"{pt.Trait?.Name} ({pt.Rating})"))
+                }
+                else
+                {
+                    <span class="text-muted">None rated</span>
+                }
+            </td>
+            <td>
+                @(player.IsActive ? "Active" : "Inactive")
+            </td>
+            <td class="text-end">
+                <div class="d-flex gap-1 flex-nowrap justify-content-end">
+                    <a asp-action="Details" asp-route-id="@player.PlayerId" class="btn btn-sm btn-outline-info">Details</a>
+                    @if (User.IsInRole("Coach"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@player.PlayerId" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        @if (player.IsActive)
+                        {
+                            <form asp-action="Deactivate" asp-route-id="@player.PlayerId" method="post" class="d-inline"
+                                  onsubmit="return confirm('Deactivate this player? Their record will be kept but hidden from the active roster.');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Deactivate</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-action="Reactivate" asp-route-id="@player.PlayerId" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-success">Reactivate</button>
+                            </form>
+                        }
+                    }
+                </div>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+</div>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No players match your search/filter.</p>
+}

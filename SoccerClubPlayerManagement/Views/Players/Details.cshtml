@@ -1,0 +1,92 @@
+﻿@model SoccerClubPlayerManagement.Models.Player
+
+@{
+    ViewData["Title"] = "Player Details";
+}
+
+<h1>@Model.FirstName @Model.LastName</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+        {
+            <img src="@Model.PhotoUrl" alt="@Model.FirstName" class="img-fluid rounded" />
+        }
+        else
+        {
+            <div class="border rounded p-4 text-center text-muted">No photo</div>
+        }
+    </div>
+    <div class="col-md-9">
+        <dl class="row">
+            <dt class="col-sm-3">Position</dt>
+            <dd class="col-sm-9">@Model.Position?.Name</dd>
+
+            <dt class="col-sm-3">Preferred Foot</dt>
+            <dd class="col-sm-9">@(Model.PreferredFoot?.ToString() ?? "Not recorded")</dd>
+
+            <dt class="col-sm-3">Height</dt>
+            <dd class="col-sm-9">
+                @if (Model.HeightFeet.HasValue)
+                {
+                    @($"{Model.HeightFeet}' {Model.HeightInches ?? 0}\"")
+                }
+                else
+                {
+                    @:Not recorded
+                }
+            </dd>
+
+            <dt class="col-sm-3">Date of Birth</dt>
+            <dd class="col-sm-9">@Model.DateOfBirth.ToString("dd MMM yyyy")</dd>
+
+            <dt class="col-sm-3">Contact Number</dt>
+            <dd class="col-sm-9">@(Model.ContactNumber ?? "-")</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@(Model.Email ?? "-")</dd>
+
+            <dt class="col-sm-3">Availability</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsAvailable)
+                {
+                    <span class="badge bg-success">Available</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark">Unavailable</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">@(Model.IsActive ? "Active" : "Inactive (retained record)")</dd>
+        </dl>
+
+        <h4>Traits</h4>
+        @if (Model.PlayerTraits != null && Model.PlayerTraits.Any())
+        {
+            <ul class="list-group" style="max-width: 400px;">
+                @foreach (var pt in Model.PlayerTraits)
+                {
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>@pt.Trait?.Name</span>
+                        <span class="badge bg-primary rounded-pill">@pt.Rating / 10</span>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">No traits rated yet.</p>
+        }
+    </div>
+</div>
+
+<div class="mt-4">
+    @if (User.IsInRole("Coach"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.PlayerId" class="btn btn-secondary">Edit</a>
+        <a asp-action="RateTraits" asp-route-id="@Model.PlayerId" class="btn btn-outline-primary">Rate Traits</a>
+    }
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+</div>
